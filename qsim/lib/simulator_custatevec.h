@@ -27,6 +27,12 @@
 #include "statespace_custatevec.h"
 #include "util_custatevec.h"
 
+// #include "matrix.h"
+#include "time.h"
+
+int count = 0;
+double global_time = 0;
+
 namespace qsim {
 
 /**
@@ -54,6 +60,28 @@ class SimulatorCuStateVec final {
     ErrorCheck(cudaFree(workspace_));
   }
 
+
+  template <typename fp_type>
+  float MatrixSparsityCheck(unsigned q, Matrix<fp_type>& m) {
+  float sparsity;
+  int sparse_count=0;
+  unsigned n = unsigned{1} << q;
+
+  for (unsigned i = 0; i < n; ++i) {
+    // unsigned pi = bits::PermuteBits(i, q, perm);
+    for (unsigned j = 0; j < n; ++j) {
+      // unsigned pj = bits::PermuteBits(j, q, perm);
+
+      if(m[2 * (n * i + j)]==0 && m[2 * (n * i + j) + 1]==0)
+        sparse_count+=1;
+    }
+  }
+  printf("sparse_count: %d\n", sparse_count);
+  sparsity = sparse_count / n*n;
+
+  return sparsity;
+  }
+
   /**
    * Applies a gate using the NVIDIA cuStateVec library.
    * @param qs Indices of the qubits affected by this gate.
@@ -62,28 +90,76 @@ class SimulatorCuStateVec final {
    */
   void ApplyGate(const std::vector<unsigned>& qs,
                  const fp_type* matrix, State& state) const {
+                  // printf("apply gate custatevec\n");
     if (qs.size() == 0) {
       uint64_t size = uint64_t{1} << state.num_qubits();
 
       if (StateSpace::is_float) {
+        // printf("float\n");
         cuComplex a = {matrix[0], matrix[1]};
         auto p = (cuComplex*) state.get();
         ErrorCheck(cublasCscal(cublas_handle_, size, &a, p, 1));
       } else {
+        // printf("double\n");
         cuDoubleComplex a = {matrix[0], matrix[1]};
         auto p = (cuDoubleComplex*) state.get();
         ErrorCheck(cublasZscal(cublas_handle_, size, &a, p, 1));
       }
     } else {
+      // printf("second else\n");
       auto workspace_size = ApplyGateWorkSpaceSize(
           state.num_qubits(), qs.size(), 0, matrix);
+      
+
+
+
+      float sparsity;
+      int sparse_count=0;
+      unsigned n = unsigned{1} << qs.size();
+      for (unsigned i = 0; i < n; ++i) {
+        for (unsigned j = 0; j < n; ++j) {
+          if(matrix[2 * (n * i + j)]==0 && matrix[2 * (n * i + j) + 1]==0)
+            sparse_count+=1;
+        }
+      }
+      sparsity = (float)sparse_count / (n*n)*100;
+
+
+
+
+
       AllocWorkSpace(workspace_size);
+
+
+      count++;
+      printf("count: %d\n", count);
+      printf("qubit size: %lu\n", qs.size());
+      printf("sparsity: %lf\n", sparsity);
+      
+      // for (unsigned long z=0;z<qs.size();z++){
+      //   printf("index: %u\n", qs[z]);
+      // }
+
+      cudaEvent_t start, stop;
+      cudaEventCreate(&start);
+      cudaEventCreate(&stop);
+      cudaEventRecord(start);
 
       ErrorCheck(custatevecApplyMatrix(
                      custatevec_handle_, state.get(), kStateType,
                      state.num_qubits(), matrix, kMatrixType, kMatrixLayout, 0,
                      (int32_t*) qs.data(), qs.size(), nullptr, nullptr, 0,
                      kComputeType, workspace_, workspace_size));
+
+      cudaEventRecord(stop);
+      cudaEventSynchronize(stop);
+      float milliseconds = 0.0;
+      cudaEventElapsedTime(&milliseconds, start, stop);
+      global_time += milliseconds;
+
+      printf("time consumed per gate: %lf mseconds\n", milliseconds);
+      printf("time consumed total: %f mseconds\n", global_time);
+
     }
   }
 

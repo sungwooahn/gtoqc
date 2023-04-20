@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #ifndef SIMULATOR_CUDA_H_
 #define SIMULATOR_CUDA_H_
 
@@ -25,6 +26,9 @@
 
 #include "bits.h"
 #include "statespace_cuda.h"
+
+int count = 0;
+double global_time = 0;
 
 namespace qsim {
 
@@ -70,6 +74,12 @@ class SimulatorCUDA final {
   void ApplyGate(const std::vector<unsigned>& qs,
                  const fp_type* matrix, State& state) const {
     // Assume qs[0] < qs[1] < qs[2] < ... .
+    // printf("apply gate cuda\n");
+
+    // cudaEvent_t start, stop;
+    // cudaEventCreate(&start);
+    // cudaEventCreate(&stop);
+    // cudaEventRecord(start);
 
     if (qs.size() == 0) {
       ApplyGateH<0>(qs, matrix, state);
@@ -77,22 +87,39 @@ class SimulatorCUDA final {
       switch (qs.size()) {
       case 1:
         ApplyGateH<1>(qs, matrix, state);
+        // printf("H_1\n");
         break;
       case 2:
         ApplyGateH<2>(qs, matrix, state);
+        // printf("H_2\n");
         break;
       case 3:
         ApplyGateH<3>(qs, matrix, state);
+        // printf("H_3\n");
         break;
       case 4:
         ApplyGateH<4>(qs, matrix, state);
+        // printf("H_4\n");
         break;
       case 5:
         ApplyGateH<5>(qs, matrix, state);
+        // printf("H_5\n");
         break;
       case 6:
         ApplyGateH<6>(qs, matrix, state);
+        // printf("H_6\n");
         break;
+      // sw add
+      // case 7:
+      //   ApplyGateH<7>(qs, matrix, state);
+      //   break;
+      // case 8:
+      //   ApplyGateH<8>(qs, matrix, state);
+      //   break;
+      // case 9:
+      //   ApplyGateH<9>(qs, matrix, state);
+      //   break;
+      // sw add end
       default:
         // Not implemented.
         break;
@@ -101,27 +128,50 @@ class SimulatorCUDA final {
       switch (qs.size()) {
       case 1:
         ApplyGateL<1>(qs, matrix, state);
+        // printf("L_1\n");
         break;
       case 2:
         ApplyGateL<2>(qs, matrix, state);
+        // printf("L_2\n");
         break;
       case 3:
         ApplyGateL<3>(qs, matrix, state);
+        // printf("L_3\n");
         break;
       case 4:
         ApplyGateL<4>(qs, matrix, state);
+        // printf("L_4\n");
         break;
       case 5:
         ApplyGateL<5>(qs, matrix, state);
+        // printf("L_5\n");
         break;
       case 6:
         ApplyGateL<6>(qs, matrix, state);
+        // printf("L_6\n");
         break;
+      // sw add
+      // case 7:
+      //   ApplyGateL<7>(qs, matrix, state);
+      //   break;
+      // case 8:
+      //   ApplyGateL<8>(qs, matrix, state);
+      //   break;
+      // case 9:
+      //   ApplyGateL<9>(qs, matrix, state);
+      //   break;
+      // sw add end
       default:
         // Not implemented.
         break;
       }
     }
+    // cudaEventRecord(stop);
+    // cudaEventSynchronize(stop);
+    // float milliseconds = 0.0;
+    // cudaEventElapsedTime(&milliseconds, start, stop);
+    // global_time += milliseconds;
+    // printf("time consumed total: %f mseconds\n", global_time);
   }
 
   /**
@@ -350,8 +400,37 @@ class SimulatorCUDA final {
 
     IndicesH<G> d_i(d_ws);
 
+    float sparsity;
+    int sparse_count=0;
+    unsigned nn = unsigned{1} << qs.size();
+    for (unsigned i = 0; i < nn; ++i) {
+      for (unsigned j = 0; j < nn; ++j) {
+        if(matrix[2 * (nn * i + j)]==0 && matrix[2 * (nn * i + j) + 1]==0)
+          sparse_count+=1;
+      }
+    }
+    sparsity = (float)sparse_count / (nn*nn)*100;
+
+    count++;
+    printf("count: %d\n", count);
+    printf("qubit size: %lu\n", qs.size());
+    printf("sparsity: %lf\n", sparsity);
+    
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start);
+
     ApplyGateH_Kernel<G><<<blocks, threads>>>(
         (fp_type*) d_ws, d_i.xss, d_i.ms, state.get());
+
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    float milliseconds = 0.0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+    global_time += milliseconds;
+    printf("time consumed per gate: %lf mseconds\n", milliseconds);
+    printf("time consumed total: %f mseconds\n", global_time);
   }
 
   template <unsigned G>
@@ -374,9 +453,38 @@ class SimulatorCUDA final {
 
     IndicesL<G> d_i(d_ws);
 
+    float sparsity;
+    int sparse_count=0;
+    unsigned nn = unsigned{1} << qs.size();
+    for (unsigned i = 0; i < nn; ++i) {
+      for (unsigned j = 0; j < nn; ++j) {
+        if(matrix[2 * (nn * i + j)]==0 && matrix[2 * (nn * i + j) + 1]==0)
+          sparse_count+=1;
+      }
+    }
+    sparsity = (float)sparse_count / (nn*nn)*100;
+
+    count++;
+    printf("count: %d\n", count);
+    printf("qubit size: %lu\n", qs.size());
+    printf("sparsity: %lf\n", sparsity);
+    
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start);
+    
     ApplyGateL_Kernel<G><<<blocks, threads>>>(
         (fp_type*) d_ws, d_i.xss, d_i.ms, d_i.qis, d_i.tis,
         1 << num_effective_qs, state.get());
+
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    float milliseconds = 0.0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+    global_time += milliseconds;
+    printf("time consumed per gate: %lf mseconds\n", milliseconds);
+    printf("time consumed total: %f mseconds\n", global_time);
   }
 
   template <unsigned G>
