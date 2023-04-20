@@ -1,0 +1,20 @@
+count: 1
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 0.385024 mseconds
+time consumed total: 0.385024 mseconds
+count: 2
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 0.050176 mseconds
+time consumed total: 0.435200 mseconds
+count: 3
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 0.046048 mseconds
+time consumed total: 0.481248 mseconds
+count: 4
+qubit size: 4
+sparsity: 93.750000
+time consumed per gate: 0.059392 mseconds
+time consumed total: 0.540640 mseconds

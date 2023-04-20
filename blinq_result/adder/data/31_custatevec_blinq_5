@@ -1,0 +1,80 @@
+count: 1
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.495522 mseconds
+time consumed total: 50.495522 mseconds
+count: 2
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.409473 mseconds
+time consumed total: 100.904995 mseconds
+count: 3
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.486271 mseconds
+time consumed total: 151.391266 mseconds
+count: 4
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.434944 mseconds
+time consumed total: 201.826210 mseconds
+count: 5
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.468864 mseconds
+time consumed total: 252.295074 mseconds
+count: 6
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.381790 mseconds
+time consumed total: 302.676865 mseconds
+count: 7
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.109375 mseconds
+time consumed total: 352.786240 mseconds
+count: 8
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.706432 mseconds
+time consumed total: 403.492672 mseconds
+count: 9
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.319359 mseconds
+time consumed total: 453.812031 mseconds
+count: 10
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.305889 mseconds
+time consumed total: 504.117920 mseconds
+count: 11
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.493439 mseconds
+time consumed total: 554.611359 mseconds
+count: 12
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 167.202820 mseconds
+time consumed total: 721.814178 mseconds
+count: 13
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 167.202820 mseconds
+time consumed total: 889.016998 mseconds
+count: 14
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 166.740860 mseconds
+time consumed total: 1055.757858 mseconds
+count: 15
+qubit size: 5
+sparsity: 96.875000
+time consumed per gate: 166.493179 mseconds
+time consumed total: 1222.251038 mseconds
+count: 16
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.302975 mseconds
+time consumed total: 1272.554012 mseconds

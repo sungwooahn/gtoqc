@@ -1,0 +1,100 @@
+count: 1
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.384895 mseconds
+time consumed total: 50.384895 mseconds
+count: 2
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.362240 mseconds
+time consumed total: 100.747135 mseconds
+count: 3
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.419712 mseconds
+time consumed total: 151.166847 mseconds
+count: 4
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.343937 mseconds
+time consumed total: 201.510784 mseconds
+count: 5
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.424831 mseconds
+time consumed total: 251.935616 mseconds
+count: 6
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.341888 mseconds
+time consumed total: 302.277504 mseconds
+count: 7
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.199360 mseconds
+time consumed total: 352.476864 mseconds
+count: 8
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.603008 mseconds
+time consumed total: 403.079872 mseconds
+count: 9
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.251778 mseconds
+time consumed total: 453.331650 mseconds
+count: 10
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.288418 mseconds
+time consumed total: 503.620068 mseconds
+count: 11
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.468864 mseconds
+time consumed total: 554.088932 mseconds
+count: 12
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.420734 mseconds
+time consumed total: 604.509666 mseconds
+count: 13
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.408447 mseconds
+time consumed total: 654.918114 mseconds
+count: 14
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.414593 mseconds
+time consumed total: 705.332706 mseconds
+count: 15
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.335743 mseconds
+time consumed total: 755.668449 mseconds
+count: 16
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.240288 mseconds
+time consumed total: 805.908737 mseconds
+count: 17
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.318336 mseconds
+time consumed total: 856.227074 mseconds
+count: 18
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.614178 mseconds
+time consumed total: 906.841251 mseconds
+count: 19
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.286560 mseconds
+time consumed total: 957.127811 mseconds
+count: 20
+qubit size: 3
+sparsity: 87.500000
+time consumed per gate: 50.293633 mseconds
+time consumed total: 1007.421444 mseconds
